@@ -1,0 +1,17 @@
+{
+  "name": "tillwatch",
+  "description": "An intelligent interval checker",
+  "main": "dist/index.js",
+  "authors": [
+    "Hiroki Osame"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/hirokiosame/tillwatch",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

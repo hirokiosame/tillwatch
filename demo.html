@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+	<script type="text/javascript" src="./dist/index.js"></script>
+
+	<script type="text/javascript">
+	
+		let onVisible = new TillWatch({
+
+			isVisible: function (el) {
+				return (el.offsetWidth > 0 || el.offsetHeight > 0);
+			},
+
+			condition: function (el) {
+				return document.body.contains(el) && this.isVisible(el);
+			},
+
+			// timeout: 10000
+		});
+
+		window.unverified = new Set();
+
+		let i = 5000;
+
+		while (i--) {
+
+			let el = document.createElement('div');
+
+			el.setAttribute('style', 'display: none');
+
+			unverified.add(el);
+
+			let timeout = ~~(Math.random() * 1000);
+
+			setTimeout(function () {
+
+				el.textContent = timeout;
+
+				document.body.appendChild(el);
+
+				// if (~~(Math.random() * 2)) {
+					setTimeout(function () {
+						el.setAttribute('style', 'display: block');
+					}, timeout);
+				// }
+
+			}, timeout);
+
+			onVisible.watch(el)
+			.then(
+				function (node) {
+					unverified.delete(node);
+				},
+				function () {
+					console.log(arguments)
+				}
+			);
+		}
+	</script>
+</body>
+</html>
