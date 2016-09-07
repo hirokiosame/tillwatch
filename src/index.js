@@ -6,15 +6,23 @@ import ObjectAssign from 'core-js/library/fn/object/assign';
 import IntervalObserver from './IntervalObserver';
 
 // Contains public API methods
-class tillWatch extends IntervalObserver {
+class TillWatch extends IntervalObserver {
 
 	timeout = 1000 * 60;
 
+	interval = 50;
+
 	// To be overwritten
-	condition (el) {}
+	condition (el) { return true; }
 
 	constructor (opts) {
+		
 		super();
+
+		if (typeof opts.condition !== 'function') {
+			throw new Error('You must pass in a condition function');
+		}
+
 		ObjectAssign(this, opts);
 	}
 
@@ -33,20 +41,20 @@ class tillWatch extends IntervalObserver {
 		}
 
 		// Put the node on the watchlist
-		let promises = this.watchList.get(el);
+		let deferreds = this.watchList.get(el);
 
-		if (!promises) {
+		if (!deferreds) {
 
-			promises = [];
+			deferreds = [];
 
-			promises.created = Date.now();
+			deferreds.created = Date.now();
 
-			promises.timeout = timeout;
+			deferreds.timeout = timeout;
 
-			this.watchList.set(el, promises);
+			this.watchList.set(el, deferreds);
 		}
 
-		promises.push(def);
+		deferreds.push(def);
 
 		return def.promise;
 	}
@@ -57,22 +65,25 @@ class tillWatch extends IntervalObserver {
 
 		// If no specific promise was provided, just remove all promises
 		if (!promise) {
-			return this.forPromises(el, def => def.reject(reason));
+			return this.forDeferreds(el, def => def.reject(reason));
 		}
 
 		// Specific promise was provided, remove it
-		let promises = this.watchList.get(el);
+		let deferreds = this.watchList.get(el);
 
-		if (!promises) { return; }
+		if (!deferreds) { return; }
 
-		let idx = promises.indexOf(promise);
+		let def = deferreds.find(def => def.promise === promise);
 
-		if (idx > -1) {
-			promises.splice(idx, 1);
-			promise.reject(reason);
+		if (def) {
+
+			let idx = deferreds.indexOf(def);
+			deferreds.splice(idx, 1);
+
+			def.reject(reason);
 			
-			if (promises.length === 0) {
-				this.watchlist.delete(el);
+			if (deferreds.length === 0) {
+				this.watchList.delete(el);
 				this.checkWatchList();
 			}
 		}
@@ -80,4 +91,4 @@ class tillWatch extends IntervalObserver {
 }
 
 // Using ES6 exports here would export to module.exports.default
-module.exports = tillWatch;
+module.exports = TillWatch;

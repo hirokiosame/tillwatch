@@ -5,7 +5,7 @@
 	<script type="text/javascript" src="./dist/index.js"></script>
 
 	<script type="text/javascript">
-	
+
 		let onVisible = new TillWatch({
 
 			isVisible: function (el) {
@@ -21,7 +21,7 @@
 
 		window.unverified = new Set();
 
-		let i = 5000;
+		let i = 500;
 
 		while (i--) {
 
@@ -32,6 +32,18 @@
 			unverified.add(el);
 
 			let timeout = ~~(Math.random() * 1000);
+
+
+			let watchEl = onVisible.watch(el);
+
+			watchEl.then(
+				function (node) {
+					unverified.delete(node);
+				},
+				function (reason) {
+					// console.log(reason);
+				}
+			);
 
 			setTimeout(function () {
 
@@ -45,17 +57,11 @@
 					}, timeout);
 				// }
 
+				if (~~(Math.random() * 2)) {
+					onVisible.unwatch(el, watchEl);
+				}
 			}, timeout);
 
-			onVisible.watch(el)
-			.then(
-				function (node) {
-					unverified.delete(node);
-				},
-				function () {
-					console.log(arguments)
-				}
-			);
 		}
 	</script>
 </body>

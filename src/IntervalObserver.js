@@ -10,16 +10,16 @@ class IntervalObserver extends BaseObserver {
 
 				// If matches condition
 				if (this.condition(node)) {
-					this.forPromises(node, def => def.resolve(node));
+					this.forDeferreds(node, def => def.resolve(node));
 				}
 
 				// If timed out
 				else if ((Date.now() - arr.created) > (arr.timeout || this.timeout)) {
-					this.forPromises(node, def => def.reject([new Error('Watching timed out'), node]));
+					this.forDeferreds(node, def => def.reject([new Error('Watching timed out'), node]));
 				}
 			}
 
-		}, 50);
+		}, this.interval);
 	}
 
 	stopObserving () {

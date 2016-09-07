@@ -12,7 +12,7 @@ class BaseObserver {
 		}
 	}
 
-	forPromises (el, cb) {
+	forDeferreds (el, cb) {
 
 		let promises = this.watchList.get(el);
 
