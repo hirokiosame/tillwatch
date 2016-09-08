@@ -6,7 +6,7 @@ class IntervalObserver extends BaseObserver {
 
 		this.observer = window.setInterval(() => {
 
-			for (let [node, arr] of this.watchList) {
+			this.watchList.forEach((arr, node) => {
 
 				// If matches condition
 				if (this.condition(node)) {
@@ -17,7 +17,7 @@ class IntervalObserver extends BaseObserver {
 				else if ((Date.now() - arr.created) > (arr.timeout || this.timeout)) {
 					this.forDeferreds(node, def => def.reject([new Error('Watching timed out'), node]));
 				}
-			}
+			});
 
 		}, this.interval);
 	}

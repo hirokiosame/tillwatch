@@ -1,7 +1,9 @@
 
+
 // ES6 Polyfills
 import Deferred from './Deferred';
 import ObjectAssign from 'core-js/library/fn/object/assign';
+import arrFind from './Array.find';
 
 import IntervalObserver from './IntervalObserver';
 
@@ -16,7 +18,7 @@ class TillWatch extends IntervalObserver {
 	condition (el) { return true; }
 
 	constructor (opts) {
-		
+
 		super();
 
 		if (typeof opts.condition !== 'function') {
@@ -73,7 +75,7 @@ class TillWatch extends IntervalObserver {
 
 		if (!deferreds) { return; }
 
-		let def = deferreds.find(def => def.promise === promise);
+		let def = arrFind(deferreds, def => def.promise === promise);
 
 		if (def) {
 

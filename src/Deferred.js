@@ -1,6 +1,6 @@
 
 // ES6 Polyfills
-import Promise from 'core-js/library/fn/promise';
+import { Promise } from 'es6-promise';
 
 export default class Deferred {
 	promise = new Promise((resolve, reject)=> {

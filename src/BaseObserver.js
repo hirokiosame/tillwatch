@@ -1,6 +1,6 @@
 
 // ES6 Polyfills
-import Map from 'core-js/library/fn/map';
+import Map from './Map.polyfill';
 
 class BaseObserver {
 

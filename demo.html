@@ -2,11 +2,16 @@
 <html>
 <head></head>
 <body>
+	<script type="text/javascript">
+	window.Map = undefined;
+	window.Promise = undefined;
+	window.Symbol = undefined;
+	</script>
 	<script type="text/javascript" src="./dist/index.js"></script>
 
 	<script type="text/javascript">
 
-		let onVisible = new TillWatch({
+		var onVisible = new TillWatch({
 
 			isVisible: function (el) {
 				return (el.offsetWidth > 0 || el.offsetHeight > 0);
@@ -19,49 +24,60 @@
 			// timeout: 10000
 		});
 
-		window.unverified = new Set();
+		// setInterval(function () {
+		// 	console.log(window.unverified);
+		// }, 1000);
+		window.unverified = [];
+		window.unverified.delete = function (el) {
+			var idx = this.indexOf(el);
+			if (idx > -1) {
+				this.splice(idx, 1);
+			}
+		};
 
-		let i = 500;
+		var i = 10;
 
 		while (i--) {
+			(function() {
 
-			let el = document.createElement('div');
+				var el = document.createElement('div');
 
-			el.setAttribute('style', 'display: none');
+				el.setAttribute('style', 'display: none');
 
-			unverified.add(el);
+				unverified.push(el);
 
-			let timeout = ~~(Math.random() * 1000);
+				var timeout = ~~(Math.random() * 1000);
 
 
-			let watchEl = onVisible.watch(el);
+				var watchEl = onVisible.watch(el);
 
-			watchEl.then(
-				function (node) {
-					unverified.delete(node);
-				},
-				function (reason) {
-					// console.log(reason);
-				}
-			);
+				watchEl.then(
+					function (node) {
+						unverified.delete(node);
+					},
+					function (reason) {
+						// console.log(reason);
+					}
+				);
 
-			setTimeout(function () {
+				setTimeout(function () {
 
-				el.textContent = timeout;
+					el.textContent = timeout;
 
-				document.body.appendChild(el);
+					document.body.appendChild(el);
 
-				// if (~~(Math.random() * 2)) {
-					setTimeout(function () {
-						el.setAttribute('style', 'display: block');
-					}, timeout);
-				// }
+					// if (~~(Math.random() * 2)) {
+						setTimeout(function () {
+							el.setAttribute('style', 'display: block');
+						}, timeout);
+					// }
 
-				if (~~(Math.random() * 2)) {
-					onVisible.unwatch(el, watchEl);
-				}
-			}, timeout);
+					// if (~~(Math.random() * 2)) {
+						// onVisible.unwatch(el, watchEl);
+					// }
+				}, timeout);
 
+			})();
 		}
 	</script>
 </body>
