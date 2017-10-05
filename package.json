@@ -2,7 +2,7 @@
   "name": "tillwatch",
   "version": "1.0.0",
   "description": "An intelligent interval checker",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "./node_modules/webpack/bin/webpack.js",
     "watch": "./node_modules/webpack/bin/webpack.js --watch",
